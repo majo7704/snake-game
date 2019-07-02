@@ -1,0 +1,6 @@
+canvas {
+  border: 1px solid black;
+  background-image: url("http://www.gamefromscratch.com/image.axd?picture=road2048v2.png");
+  background-size: 200px 300px;
+  background-position-y: -81px;
+}
