@@ -1,7 +1,14 @@
 let canvas = document.getElementById("canvas");
 
 let ctx = canvas.getContext('2d');
-
+let intervalId = setInterval(function(){
+  ctx.clearRect(0, 0, width, height);
+  drawScore();
+  snake.move();
+  snake.draw();
+  apple.draw();
+  drawBorder();
+}, 100);
 
 
 let width = canvas.width;
@@ -30,7 +37,7 @@ let drawScore = function () {
 drawScore();
 //clear the interval and deisplay game over text
 let gameOver = function () {
-  clearInterval(intervalId);
+  clearInterval(intervalId); //stop the game
   ctx.font = "60px Courier";
   ctx.fillStyle = "Black";
   ctx.textAlign = "center";
@@ -74,5 +81,25 @@ Block.prototype.drawCircle = function (color) {
 let sampleCircle = new Block(4, 3);
 sampleCircle.drawCircle("LightGreen")
 
-var sampleBlock = new Block(3, 4);
+let sampleBlock = new Block(3, 4);
 sampleBlock.drawSquare("LightBlue")
+
+Block.prototype.equal = function (BotherBlock) {
+  return this.col === otherBlock.col && this.row === otherBlock.row;
+}
+let Snake = function () {
+  this.segments = [
+    new Block(7, 5),
+    new Block(6, 5),
+    new Block(5, 5)
+  ];
+  this.direction = "right";
+  this.nextDirection = "right";
+}
+  Snake.prototype.draw = function (){
+    for (let i = 0; i < this.segments.length; i++){
+      this.segments[i].drawSquare("Pink")
+    }
+  }
+  let snake = new Snake();
+  snake.draw();
