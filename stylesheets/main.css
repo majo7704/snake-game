@@ -1,13 +1,13 @@
 #canvas {
-  border: 10px solid black;
-  background: yellowgreen;
-  width: 90%;
-  height: 150%;
+border: 10px solid black;
+background: yellowgreen;
+width: 90%;
+height: 100%;
 }
 
 body {
-  font-family: 'Barriecito', cursive 'Courier';
-  margin: 3%;
-  width: 100%;
-  height: auto;
+  font-family: 'Bahianita', cursive 'Courier';
+  margin: 2%;
+  width: 90%;
+  height: 50%;
 }
