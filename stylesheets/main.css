@@ -1,6 +1,13 @@
-canvas {
-  border: 1px solid black;
-  background-image: url(".png");
-  background-size: 500px 500px;
-  background-position-y: -81px;
+#canvas {
+  border: 10px solid black;
+  background: yellowgreen;
+  width: 90%;
+  height: 150%;
+}
+
+body {
+  font-family: 'Barriecito', cursive 'Courier';
+  margin: 3%;
+  width: 100%;
+  height: auto;
 }
