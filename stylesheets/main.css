@@ -1,0 +1,6 @@
+canvas {
+  border: 1px solid black;
+  background-image: url(".png");
+  background-size: 500px 500px;
+  background-position-y: -81px;
+}
