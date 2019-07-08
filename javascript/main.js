@@ -1,17 +1,9 @@
 //canvas set up
+
+$(document).ready(function () {
 let canvas = document.getElementById("canvas")
 let ctx =canvas.getContext('2d');
 
-
-let intervalId = setInterval(function(){
-  ctx.clearRect(0, 0, width, height);
-  drawScore();
-  snake.move();
-  snake.draw();
-  redApple.draw();
-  drawBorder();
-
-}, 100);
 //my variables
 let width = canvas.width;
 let height = canvas.height;
@@ -22,33 +14,32 @@ let score = 0;
 
 let drawBorder = function (){
   ctx.fillStyle = 'Gray'
-  ctx.fillRect(0, 0, width, blockSize/2);
-  ctx.fillRect(0, height-blockSize/2, width, blockSize);
-  ctx.fillRect(0, 0, blockSize/2, height);
-  ctx.fillRect(width-blockSize/2, 0, blockSize, height)
+  ctx.fillRect(0, 0, width, blockSize);
+  ctx.fillRect(0, height - blockSize, width, blockSize);
+  ctx.fillRect(0, 0, blockSize, height);
+  ctx.fillRect(width - blockSize, 0, blockSize, height)
 };
-drawBorder();
 
-let drwaScore = function () {
-  ctx.font = "4vh Bahianita";
+
+let drawScore = function () {
+  ctx.font = " 10vh Bahiani";
   ctx.fillStyle = "Black";
-  ctx.shadowBlur = 10;
+  ctx.shadowBlur = 0; 
   ctx.shadowColor = "black";
-  ctx.textAlign = "left";
+  ctx.textAlign = "center";
   ctx.textBaseLine ="top";
-  ctx.fillText("Score: " + score, blockSize + 10, blockSize + 10) 
+  ctx.fillText("Score: " + score, blockSize, blockSize) 
 };
-drwaScore();
-//clear the interval
-let gameOver = function () {
-  clearInterval(intervalId);
-  ctx.font = "6vh Bahianita";
-  ctx.fillStyle = "Black";
-  ctx.textAlign = 'center';
-  ctx.textBaseLine = "middle";
-  ctx.fillText("Game Over", width/2, height/2)
-};
-gameOver();
+  let gameOver = function () {
+    clearInterval(intervalId);
+    ctx.font = "6vh Bahiani";
+    ctx.fillStyle = "Black";
+    ctx.textAlign = 'center'; 
+    ctx.textBaseLine = "middle";
+    ctx.fillText("Game Over", width / 2, height / 2)
+  };
+ 
+
 
 let circle = function(x, y, radius, fillCircle) {
   ctx.beginPath();
@@ -81,35 +72,31 @@ Block.prototype.drawCircle = function(color) {
 
 //checks if a block is in the same location as other one
 Block.prototype.equal = function (otherBlock) {
-  return this.col === otherBlock.col && this.row === otherBlock.row
+  return this.col === otherBlock.col && this.row === otherBlock.row;
 }
 
 let Snake = function () {
   this.segments = [
     new Block(7, 5),
     new Block(6, 5),
-    new Block(5, 5)
+    new Block(5, 5),
+    new Block(4, 5)
   ];
   this.direction = "right";
   this.nextDirection = "right"
 }
 Snake.prototype.draw = function () {
   for (let i = 0; i < this.segments.length; i++){
-    ctx.fillStyle = (i ==0) ? "green" : "white";
-    ctx.fillRect(this.segments[i].x, this.segments[i].y, blockSize, blockSize)
-    ctx.strokeStyle ="red"
-    ctx.strokeRect(this.segments[i].x,this.segments[i].y, blockSize, blockSize)
     this.segments[i].drawSquare("Orange")
   }
 }
-let mainSnake = new Snake();
-mainSnake.draw();
+
 
 Snake.prototype.move = function (){
-  let head = this.segments[0];
-  let newHead;
+  var head = this.segments[0];
+  var newHead;
 
-  this.direction = this.newDirection;
+  this.direction = this.nextDirection;
 
   if (this.direction === 'right') {
     newHead = new Block(head.col +1, head.row);
@@ -118,17 +105,93 @@ Snake.prototype.move = function (){
   } else if (this.direction === 'left') {
     newHead = new Block(head.col - 1, head.row);
   } else if (this.direction === 'up') {
-    newHead = new Block()
+    newHead = new Block(head.col, head.row - 1);
   }
-}
-//document.onkeydown = function (e) {
-  //if (e.keyCode == 32) {
-  //  ball.userPull = 0.3;
-  //}
-//}
 
-//document.onkeyup = function (e) {
-  //if (e.keyCode == 32) {
-   // ball.userPull = 0;
-  //}
-//};
+  if (this.checkCollision(newHead)) {
+    gameOver();
+    return;
+  }
+  this.segments.unshift(newHead);
+
+  if (newHead.equal(apple.position)) {
+    score++;
+    apple.move();
+  } else {
+    this.segments.pop();
+  }
+};
+
+Snake.prototype.checkCollision = function (head) {
+  let leftCollision = (head.col === 0);
+  let topCollision = (head.row === 0);
+  let rightCollision = (head.col === widthInBlocks -1);
+  let bottomCollision = (head.row === heightInBlocks - 1);
+
+  let wallCollision = leftCollision || topCollision || rightCollision || bottomCollision;
+
+  let selfCollision = false;
+  for (let i = 0; i < this.segments.length; i ++){
+    if (head.equal(this.segments[i])) {
+      selfCollision = true;
+    }
+  }
+  return wallCollision || selfCollision;
+};
+Snake.prototype.setDirection = function(newDirection) {
+  if (this.direction === "up" && newDirection === "down") {
+    return;
+  } else if (this.direction === "right" && newDirection === "left") {
+    return;
+  } else if (this.direction === "down" && newDirection === "up") {
+    return;
+  } else if (this.direction === "left" && newDirection === "right") {
+    return;
+  }
+  this.nextDirection = newDirection;
+};
+let Apple = function () {
+  this.position = new Block(10, 10);
+};
+
+Apple.prototype.draw = function () {
+  this.position.drawCircle('Red')
+};
+
+Apple.prototype.move = function () {
+  let randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
+  let randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
+  this.position = new Block(randomCol, randomRow);
+};
+
+var snake = new Snake();
+var apple = new Apple();
+
+let intervalId = setInterval(function () {
+  ctx.clearRect(0, 0, width, height);
+  drawScore();
+  snake.move();
+  snake.draw();
+  apple.draw();
+  drawBorder();
+
+}, 100);
+
+//clear the interval
+
+
+let directions = {
+  32: "pause",
+  37: "left",
+  38: "up",
+  39: "right",
+  40: "down"
+};
+
+$('body').keydown(function(event){
+  let newDirection = directions[event.keyCode];
+  if (newDirection !== undefined) {
+    snake.setDirection(newDirection);
+  }
+});
+})
