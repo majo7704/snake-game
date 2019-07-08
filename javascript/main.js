@@ -104,6 +104,23 @@ Snake.prototype.draw = function () {
 }
 let mainSnake = new Snake();
 mainSnake.draw();
+
+Snake.prototype.move = function (){
+  let head = this.segments[0];
+  let newHead;
+
+  this.direction = this.newDirection;
+
+  if (this.direction === 'right') {
+    newHead = new Block(head.col +1, head.row);
+  } else if (this.direction === 'down') {
+    newHead = new Block(head.col, head.row +1);
+  } else if (this.direction === 'left') {
+    newHead = new Block(head.col - 1, head.row);
+  } else if (this.direction === 'up') {
+    newHead = new Block()
+  }
+}
 //document.onkeydown = function (e) {
   //if (e.keyCode == 32) {
   //  ball.userPull = 0.3;
