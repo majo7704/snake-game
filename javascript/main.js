@@ -1,3 +1,4 @@
+//canvas set up
 let canvas = document.getElementById("canvas")
 let ctx =canvas.getContext('2d');
 
@@ -11,7 +12,7 @@ let intervalId = setInterval(function(){
   drawBorder();
 
 }, 100);
-
+//my variables
 let width = canvas.width;
 let height = canvas.height;
 let blockSize = 10;
@@ -38,7 +39,7 @@ let drwaScore = function () {
   ctx.fillText("Score: " + score, blockSize + 10, blockSize + 10) 
 };
 drwaScore();
-
+//clear the interval
 let gameOver = function () {
   clearInterval(intervalId);
   ctx.font = "6vh Bahianita";
@@ -58,11 +59,11 @@ let circle = function(x, y, radius, fillCircle) {
     ctx.stroke();
   }
 };
+//Block constructor
 let Block = function (col, row) {
   this.col = col;
   this.row = row;
 }
-Block();
 
 Block.prototype.drawSquare = function(color) {
   let x = this.col * blockSize ;
@@ -71,20 +72,14 @@ Block.prototype.drawSquare = function(color) {
   ctx.fillRect(x, y, blockSize, blockSize);
 };
 
-let sampleSquare = new Block(4, 3);
-sampleSquare.drawSquare("blue");
-let anotherSquare = new Block(5, 3);
-anotherSquare.drawSquare('red')
-
 Block.prototype.drawCircle = function(color) {
   let centerX = this.col * blockSize + blockSize / 2;
   let centerY = this.row * blockSize + blockSize / 2;
   ctx.fillStyle = color;
   circle(centerX, centerY, blockSize / 2, true)
 };
-let sampleCircle = new Block(8, 8);
-sampleCircle.drawCircle('Pink')
 
+//checks if a block is in the same location as other one
 Block.prototype.equal = function (otherBlock) {
   return this.col === otherBlock.col && this.row === otherBlock.row
 }
