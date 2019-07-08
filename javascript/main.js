@@ -14,7 +14,7 @@ let intervalId = setInterval(function(){
 
 let width = canvas.width;
 let height = canvas.height;
-let blockSize = 15;
+let blockSize = 10;
 let widthInBlocks = width / blockSize;
 let heightInBlocks = height / blockSize;
 let score = 0;
@@ -29,7 +29,7 @@ let drawBorder = function (){
 drawBorder();
 
 let drwaScore = function () {
-  ctx.font = "3vh Bahianita";
+  ctx.font = "4vh Bahianita";
   ctx.fillStyle = "Black";
   ctx.shadowBlur = 10;
   ctx.shadowColor = "black";
@@ -41,7 +41,7 @@ drwaScore();
 
 let gameOver = function () {
   clearInterval(intervalId);
-  ctx.font = "5vh Bahianita";
+  ctx.font = "6vh Bahianita";
   ctx.fillStyle = "Black";
   ctx.textAlign = 'center';
   ctx.textBaseLine = "middle";
@@ -100,7 +100,11 @@ let Snake = function () {
 }
 Snake.prototype.draw = function () {
   for (let i = 0; i < this.segments.length; i++){
-    this.segments[i].drawSquare("Pink")
+    ctx.fillStyle = (i ==0) ? "green" : "white";
+    ctx.fillRect(this.segments[i].x, this.segments[i].y, blockSize, blockSize)
+    ctx.strokeStyle ="red"
+    ctx.strokeRect(this.segments[i].x,this.segments[i].y, blockSize, blockSize)
+    this.segments[i].drawSquare("Orange")
   }
 }
 let mainSnake = new Snake();
