@@ -1,4 +1,4 @@
-#canvas {
+canvas {
 border: 10px solid black;
 background: yellowgreen;
 width: 90%;
@@ -7,7 +7,7 @@ height: 100%;
 
 body {
   font-family: 'Bahianita', cursive 'Courier';
-  margin: 2%;
+  margin: 0, auto;
   width: 90%;
   height: 50%;
 }
