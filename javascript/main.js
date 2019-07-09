@@ -122,7 +122,9 @@ Snake.prototype.move = function (){
     newHead = new Block(head.col - 1, head.row);
   } else if (this.direction === 'up') {
     newHead = new Block(head.col, head.row - 1);
-  }
+  } else if (this.direction === 'stop') {
+    newHead = new Block(head.col, head.row);
+  } 
 
   if (this.checkCollision(newHead)) {
     gameOver();
@@ -201,22 +203,19 @@ let intervalId = setInterval(function () {
 
 let pauseGame = function() {
   clearInterval(intervalId);
-  allowPressKeys = false;
   score;
 }
   let startTheGame = function () {
-    intervalId = setInterval(snake.move(), 100)
-    allowPressKeys = true;
+      this.snake.move();
   }
 
 let directions = {
-  13: "start",
+  13: "enter",//go
+  32: "pause",// space,
   37: "left",
   38: "up",
   39: "right",
   40: "down",
-  80: 'pause',//p
-  83: 'start'//s
 };
 
 $('body').keydown(function(event){
@@ -225,11 +224,11 @@ $('body').keydown(function(event){
     snake.setDirection(newDirection);
   }
   switch (event.keyCode) {
-    case 80: 
+    case 32: 
       pauseGame();
       break;
-    case 83:
-      startTheGame();
+    case 18:
+      startTheGame(snake);
       break;
       default:
         console.log("press the key")
