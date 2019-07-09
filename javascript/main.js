@@ -1,6 +1,8 @@
 //canvas set up
 
 $(document).ready(function () {
+
+
 let canvas = document.getElementById("canvas")
 let ctx =canvas.getContext('2d');
 
@@ -19,24 +21,23 @@ let drawBorder = function (){
   ctx.fillRect(0, 0, blockSize, height);
   ctx.fillRect(width - blockSize, 0, blockSize, height)
 };
+  let drawScore = function () {
+    ctx.font = " 20px Bahiani";
+    ctx.fillStyle = "Black";
+    ctx.textAlign = "center";
+    ctx.textBaseLine = "top";
+    ctx.fillText("Score: " + score, 50, 30)
+  };
 
 
-let drawScore = function () {
-  ctx.font = " 10vh Bahiani";
-  ctx.fillStyle = "Black";
-  ctx.shadowBlur = 0; 
-  ctx.shadowColor = "black";
-  ctx.textAlign = "center";
-  ctx.textBaseLine ="top";
-  ctx.fillText("Score: " + score, blockSize, blockSize) 
-};
   let gameOver = function () {
     clearInterval(intervalId);
+    
     ctx.font = "6vh Bahiani";
     ctx.fillStyle = "Black";
     ctx.textAlign = 'center'; 
     ctx.textBaseLine = "middle";
-    ctx.fillText("Game Over", width / 2, height / 2)
+    ctx.fillText("THE END" + " press enter to restart", width / 2, height / 2)
   };
  
 
@@ -90,7 +91,16 @@ Snake.prototype.draw = function () {
     this.segments[i].drawSquare("Orange")
   }
 }
-
+let Snake2 = function () {
+  this.segments = [
+      new Block(10, 2),
+      new Block(11, 2),
+      new Block(12, 3),
+      new Block(13, 2)
+  ]
+  this.direction = "right";
+  this.nextDirection = "right"
+}
 
 Snake.prototype.move = function (){
   var head = this.segments[0];
@@ -162,10 +172,15 @@ Apple.prototype.move = function () {
   let randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
   let randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
   this.position = new Block(randomCol, randomRow);
+  if (this.position === this.segments) {
+    new Block(randomCol, randomRow)
+  }
 };
 
 var snake = new Snake();
+var snake2 = new Snake2();
 var apple = new Apple();
+
 
 let intervalId = setInterval(function () {
   ctx.clearRect(0, 0, width, height);
@@ -176,22 +191,36 @@ let intervalId = setInterval(function () {
   drawBorder();
 
 }, 100);
-
-//clear the interval
-
+let isPaused = false;
+let pauseGame = function() {
+  clearInterval(intervalId);
+  score;
+  
+}
 
 let directions = {
-  32: "pause",
+  13: "start",
   37: "left",
   38: "up",
   39: "right",
-  40: "down"
+  40: "down",
+  80: 'pause',//p
+  83: 'start'//s
+
 };
 
 $('body').keydown(function(event){
   let newDirection = directions[event.keyCode];
   if (newDirection !== undefined) {
     snake.setDirection(newDirection);
+  }
+  if (event.keyCode == 80){ 
+    pauseGame()
+  }else {
+    event.preventDefault()
+  }
+  if (event.keyCode == 83) {
+    snake.move();
   }
 });
 })
