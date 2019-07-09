@@ -14,6 +14,8 @@ let widthInBlocks = width / blockSize;
 let heightInBlocks = height / blockSize;
 let score = 0;
 
+
+
 let drawBorder = function (){
   ctx.fillStyle = 'Gray'
   ctx.fillRect(0, 0, width, blockSize);
@@ -32,15 +34,19 @@ let drawBorder = function (){
 
   let gameOver = function () {
     clearInterval(intervalId);
-    
     ctx.font = "6vh Bahiani";
     ctx.fillStyle = "Black";
     ctx.textAlign = 'center'; 
     ctx.textBaseLine = "middle";
-    ctx.fillText("THE END" + " press enter to restart", width / 2, height / 2)
+    let imgGameOver = new Image(10, 10);
+    imgGameOver.src = '../javascript/img/THE-END.png';
+    imgGameOver.onload = function(){
+    ctx.drawImage(imgGameOver, 70, 50);
+    }
+    let audio = new Audio('../javascript/audio/382310__myfox14__game-over-arcade.wav');
+    audio.play();
   };
  
-
 
 let circle = function(x, y, radius, fillCircle) {
   ctx.beginPath();
@@ -125,6 +131,8 @@ Snake.prototype.move = function (){
   this.segments.unshift(newHead);
 
   if (newHead.equal(apple.position)) {
+    let audio = new Audio('../javascript/audio/20280__koops__apple-crunch-17.wav');
+    audio.play();
     score++;
     apple.move();
   } else {
@@ -189,14 +197,17 @@ let intervalId = setInterval(function () {
   snake.draw();
   apple.draw();
   drawBorder();
-
 }, 100);
-let isPaused = false;
+
 let pauseGame = function() {
   clearInterval(intervalId);
+  allowPressKeys = false;
   score;
-  
 }
+  let startTheGame = function () {
+    intervalId = setInterval(snake.move(), 100)
+    allowPressKeys = true;
+  }
 
 let directions = {
   13: "start",
@@ -206,7 +217,6 @@ let directions = {
   40: "down",
   80: 'pause',//p
   83: 'start'//s
-
 };
 
 $('body').keydown(function(event){
@@ -214,13 +224,15 @@ $('body').keydown(function(event){
   if (newDirection !== undefined) {
     snake.setDirection(newDirection);
   }
-  if (event.keyCode == 80){ 
-    pauseGame()
-  }else {
-    event.preventDefault()
+  switch (event.keyCode) {
+    case 80: 
+      pauseGame();
+      break;
+    case 83:
+      startTheGame();
+      break;
+      default:
+        console.log("press the key")
   }
-  if (event.keyCode == 83) {
-    snake.move();
-  }
-});
 })
+});
