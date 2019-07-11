@@ -36,11 +36,6 @@ let drawScore = function () {
 let gameOver = function () {
   clearInterval(intervalId);
   isGameOver = true;
-  
-  // ctx.font = "6vh Bahiani";
-  // ctx.fillStyle = "Black";
-  // ctx.textAlign = 'center'; 
-  // ctx.textBaseLine = "middle";
   let imgGameOver = new Image(10, 10);
   imgGameOver.src = '../javascript/img/THE-END.png';
   imgGameOver.onload = function(){
