@@ -6,6 +6,7 @@ $(document).ready(function () {
 let canvas = document.getElementById("canvas")
 let ctx =canvas.getContext('2d');
 
+
 //my variables
 let width = canvas.width;
 let height = canvas.height;
@@ -40,6 +41,7 @@ let gameOver = function () {
   imgGameOver.src = '../javascript/img/THE-END.png';
   imgGameOver.onload = function(){
   ctx.drawImage(imgGameOver, 70, 50);
+  
   }
   let audio = new Audio('../javascript/audio/382310__myfox14__game-over-arcade.wav');
   audio.play();
