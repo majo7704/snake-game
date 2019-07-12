@@ -189,6 +189,12 @@ var apple = new Apple();
 //the Game 
 let intervalId = setInterval(function () {
   ctx.clearRect(0, 0, width, height);
+  let imgGame = new Image();
+  imgGame.src = '../javascript/img/Welcome.png';
+  imgGame.onload = function () {
+    ctx.drawImage(imgGame, 10, 50);
+  }
+  pauseGame()
   drawScore();
   snake.move();
   snake.draw();
